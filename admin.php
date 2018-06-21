@@ -2,18 +2,6 @@
 
 $dir = 'tests';
 $files = array_diff( scandir( $dir), array('..', '.'));
-
-if (!empty($_FILES["json"])) {
-  $validation = pathinfo($_FILES["json"]["name"]);
-  if (@$validation['extension'] === 'json') {
-    move_uploaded_file($_FILES["json"]["tmp_name"], "tests/".$_FILES["json"]["name"]);
-    header("Location: list.php");
-  } elseif (@is_null($validation['extension'])) {
-    echo '<h3>Вы не выбрали файл!<h3><br />';
-  } else {
-  echo '<h3>Можно загрузить только файл в формате .json<h3><br />';
-  }
-}
 ?>
 
 <!DOCTYPE html>
@@ -21,10 +9,28 @@ if (!empty($_FILES["json"])) {
 <head>
     <meta charset="utf-8">
     <title>Страница загрузки файлов с тестами</title>
+    <style>
+      h2 {
+        color: red;
+      }
+    </style>
 </head>
 <body>
   	<h3>Вы можете добавить файл с тестом на сервер</h3>
     <p>(поддерживаются только файлы с расширением .json)</p><br/>
+      <?php
+        if (!empty($_FILES["json"])) {
+          $validation = pathinfo($_FILES["json"]["name"]);
+          if (@$validation['extension'] === 'json') {
+            move_uploaded_file($_FILES["json"]["tmp_name"], "tests/".$_FILES["json"]["name"]);
+            header("Location: list.php");
+          } elseif (@is_null($validation['extension'])) {
+            echo '<h2>Вы не выбрали файл!</h2><br />';
+          } else {
+          echo '<h2>Можно загрузить только файл в формате .json</h2><br />';
+          }
+        }
+      ?>
     <h3>Пример структуры файла test_1.json:</h3>
     <pre>
 
